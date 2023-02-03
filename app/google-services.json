@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "778044990988",
+    "project_id": "paypesa-fc058",
+    "storage_bucket": "paypesa-fc058.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778044990988:android:3e617a2d37de5df917f029",
+        "android_client_info": {
+          "package_name": "com.example.paypesa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778044990988-qdurhforcslk3e2esfj11haco8np7beu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC-t_EDvZ1L3hRsGDToGl65Ki3Hs2fhcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778044990988-qdurhforcslk3e2esfj11haco8np7beu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
