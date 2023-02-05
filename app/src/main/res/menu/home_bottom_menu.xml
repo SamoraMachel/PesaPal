@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Home"
-        android:icon="@drawable/round_home_24"/>
-    <item android:title="Payments"
-        android:icon="@drawable/baseline_attach_money_24"/>
+    <item
+        android:icon="@drawable/round_home_24"
+        android:title="Home"
+        app:showAsAction="always"
+        app:iconTint="@color/white"/>
+    <item
+        android:icon="@drawable/baseline_attach_money_24"
+        android:title="Payments"
+        app:showAsAction="always"
+        app:iconTint="@color/white"/>
 </menu>
