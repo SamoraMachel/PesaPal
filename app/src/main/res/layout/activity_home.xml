@@ -7,6 +7,7 @@
     tools:context=".ui.home.HomeActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,10 +22,10 @@
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="24dp"
             android:clickable="true"
-            app:tint="@color/white"
             app:backgroundTint="@color/blue_700"
             app:layout_anchor="@id/bottomAppBar"
-            app:srcCompat="@drawable/baseline_add_24" />
+            app:srcCompat="@drawable/baseline_add_24"
+            app:tint="@color/white" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
@@ -44,5 +45,16 @@
             app:menu="@menu/home_bottom_menu" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#00FFFFFF"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/home_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
