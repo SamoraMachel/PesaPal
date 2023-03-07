@@ -10,4 +10,9 @@
         android:name="com.example.paypesa.ui.home.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/transactionFragment"
+        android:name="com.example.paypesa.ui.transaction.TransactionFragment"
+        android:label="fragment_transaction"
+        tools:layout="@layout/fragment_transaction" />
 </navigation>

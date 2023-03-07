@@ -55,6 +55,8 @@
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/home_nav" />
+        app:layout_constraintVertical_bias="0.0"
+        app:navGraph="@navigation/home_nav"
+        tools:layout_editor_absoluteX="-78dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
