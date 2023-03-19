@@ -1,5 +1,6 @@
 package com.example.paypesa.data.datasource
 
+import com.example.paypesa.data.model.ModelMap
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
@@ -24,12 +25,15 @@ class FirebaseDataSource @Inject constructor(
                     launch {
                         send(Result.failure(it))
                     }
+                    it.printStackTrace()
                 }
 
         } catch (error : IOException) {
             send(Result.failure(Exception("Network Error. Kindly check your internet")))
+            error.printStackTrace()
         } catch (error: Exception) {
             send(Result.failure(error))
+            error.printStackTrace()
         }
         awaitClose()
     }
@@ -46,12 +50,65 @@ class FirebaseDataSource @Inject constructor(
                     launch {
                         send(Result.failure(it))
                     }
+                    it.printStackTrace()
                 }
 
         }  catch (error : IOException) {
             send(Result.failure(Exception("Network Error. Kindly check your internet")))
+            error.printStackTrace()
         } catch (error: Exception) {
             send(Result.failure(error))
+            error.printStackTrace()
+        }
+        awaitClose()
+    }
+
+    suspend fun<T: ModelMap> createDocument(path: String, data: T ) = channelFlow<Result<String>> {
+        try {
+            firebaseFirestore.collection(path)
+                .add(data.asMap())
+                .addOnSuccessListener {
+                    launch {
+                        send(Result.success(it.id))
+                    }
+                }
+                .addOnFailureListener {
+                    launch {
+                        send(Result.failure(it))
+                    }
+                    it.printStackTrace()
+                }
+        } catch (error: IOException) {
+            send(Result.failure(Exception("Network Error: Kindly check your internet")))
+            error.printStackTrace()
+        } catch (error: Exception) {
+            send(Result.failure(error))
+            error.printStackTrace()
+        }
+        awaitClose()
+    }
+
+    suspend fun<T: ModelMap> createNestedDocument(path: String, id: String, data: T) = channelFlow<Result<String>> {
+        try {
+            firebaseFirestore.collection(path).document(id).collection("transactionLog")
+                .add(data.asMap())
+                .addOnSuccessListener {
+                    launch {
+                        send(Result.success(it.id))
+                    }
+                }
+                .addOnFailureListener {
+                    launch {
+                        send(Result.failure(it))
+                    }
+                    it.printStackTrace()
+                }
+        } catch (error: IOException) {
+            send(Result.failure(Exception("Network Error: Kindly check your internet")))
+            error.printStackTrace()
+        } catch (error: Exception) {
+            send(Result.failure(error))
+            error.printStackTrace()
         }
         awaitClose()
     }

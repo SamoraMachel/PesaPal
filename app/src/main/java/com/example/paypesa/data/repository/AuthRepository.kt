@@ -9,14 +9,15 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val firebaseDataSource: FirebaseDataSource
 ) {
-    suspend fun loginUser(authModel: AuthModel) =  flow{
+    suspend fun loginUser(authModel: AuthModel) =  flow {
         emit(ResultState.Loading)
 
         firebaseDataSource.signInUser(authModel.email, authModel.password).collect { result: Result<Boolean> ->
             if (result.isSuccess)
                 emit(ResultState.Success(result.getOrNull()))
-            else if (result.isFailure)
+            else if (result.isFailure) {
                 emit(ResultState.Failure(result.exceptionOrNull()))
+            }
             else
                 emit(ResultState.Failure(Throwable(Exception("Unknown Error occurred"))))
         }
