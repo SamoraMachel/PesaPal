@@ -8,7 +8,7 @@
     tools:context=".ui.payment.PaymentReviewFragment">
 
     <Button
-        android:id="@+id/auth_login"
+        android:id="@+id/send_money_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

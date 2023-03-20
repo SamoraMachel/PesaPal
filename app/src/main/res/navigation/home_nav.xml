@@ -15,4 +15,18 @@
         android:name="com.example.paypesa.ui.transaction.TransactionFragment"
         android:label="fragment_transaction"
         tools:layout="@layout/fragment_transaction" />
+    <fragment
+        android:id="@+id/sendAmountFragment"
+        android:name="com.example.paypesa.ui.payment.SendAmountFragment"
+        android:label="fragment_send_amount"
+        tools:layout="@layout/fragment_send_amount" >
+        <action
+            android:id="@+id/action_sendAmountFragment_to_paymentReviewFragment"
+            app:destination="@id/paymentReviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentReviewFragment"
+        android:name="com.example.paypesa.ui.payment.PaymentReviewFragment"
+        android:label="fragment_payment_review"
+        tools:layout="@layout/fragment_payment_review" />
 </navigation>
