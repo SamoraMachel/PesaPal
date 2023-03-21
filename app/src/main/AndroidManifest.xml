@@ -13,6 +13,13 @@
         android:theme="@style/Theme.Paypesa"
         tools:targetApi="31">
         <activity
+            android:name=".ui.auth.ProfileSetup"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false" />
         <activity

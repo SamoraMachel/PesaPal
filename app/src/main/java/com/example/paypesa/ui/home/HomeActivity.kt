@@ -1,5 +1,6 @@
 package com.example.paypesa.ui.home
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -26,11 +27,11 @@ class HomeActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.fragmentContainerView)
 
-
         val bottomAppBar: BottomAppBar = binding.bottomAppBar
-        bottomAppBar.setupWithNavController(navController)
+        setSupportActionBar(bottomAppBar)
 
         binding.sendMoneyFab.setOnClickListener {
+            binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#F5F3EF"))
             openSendMoneyFragment()
         }
      }
@@ -40,20 +41,19 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.home_bottom_menu, menu)
+        menuInflater.inflate(R.menu.home_bottom_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.dashboardFragment -> {
-                Toast.makeText(applicationContext, "Dashboard Clicked", Toast.LENGTH_SHORT).show()
+                binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#F5F3EF"))
                 navController.navigate(R.id.dashboardFragment)
                 true
             }
             R.id.transactionFragment -> {
-                Toast.makeText(applicationContext, "Transaction Log Clicked", Toast.LENGTH_SHORT).show()
+                binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
                 navController.navigate(R.id.transactionFragment)
                 true
             }

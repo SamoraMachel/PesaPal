@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.paypesa.R
 import com.example.paypesa.data.ConstantKey
 import com.example.paypesa.data.model.AuthModel
+import com.example.paypesa.data.model.ProfileModel
 import com.example.paypesa.data.repository.AuthRepository
+import com.example.paypesa.data.repository.ProfileRepository
 import com.example.paypesa.data.state.AuthFormState
 import com.example.paypesa.data.state.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val _authForm = MutableLiveData<AuthFormState>()
@@ -26,6 +29,9 @@ class AuthViewModel @Inject constructor(
 
     private val _authResult = MutableLiveData<ResultState<Boolean>>()
     val authResult: LiveData<ResultState<Boolean>> = _authResult
+
+    private val _profileState = MutableLiveData<ResultState<String>>()
+    val profileState: LiveData<ResultState<String>> = _profileState
 
     fun register(authModel: AuthModel, sharedPrefEditor: SharedPreferences.Editor) = viewModelScope.launch {
         authRepository.registerUser(authModel).collect { resultState: ResultState<Boolean> ->
@@ -82,5 +88,15 @@ class AuthViewModel @Inject constructor(
 
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 8
+    }
+
+    private fun createProfile(profile: ProfileModel) = viewModelScope.launch {
+        profileRepository.createProfile(profile).collect { resultState: ResultState<String> ->
+            when(resultState) {
+                is ResultState.Failure -> _profileState.value = ResultState.Failure(resultState.exception, resultState.message)
+                ResultState.Loading -> _profileState.value = ResultState.Loading
+                is ResultState.Success -> _profileState.value = ResultState.Success(resultState.data)
+            }
+        }
     }
 }
