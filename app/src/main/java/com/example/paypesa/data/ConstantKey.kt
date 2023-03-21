@@ -5,4 +5,6 @@ object ConstantKey {
     const val IS_USER_LOGGED_IN = "isUserLoggedIn"
     const val USER_EMAIL = "userEmail"
     const val USER_PASSWORD = "userPassword"
+
+    const val IS_PROFILE_CREATED = "isProfileCreated"
 }

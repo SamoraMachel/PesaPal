@@ -21,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val sharedPrefEditor: SharedPreferences.Editor
 ) : ViewModel() {
 
     private val _authForm = MutableLiveData<AuthFormState>()
@@ -30,42 +31,49 @@ class AuthViewModel @Inject constructor(
     private val _authResult = MutableLiveData<ResultState<Boolean>>()
     val authResult: LiveData<ResultState<Boolean>> = _authResult
 
+    private val _loginState = MutableLiveData<ResultState<Boolean>>()
+    val loginState: LiveData<ResultState<Boolean>> = _loginState
+
     private val _profileState = MutableLiveData<ResultState<String>>()
     val profileState: LiveData<ResultState<String>> = _profileState
 
-    fun register(authModel: AuthModel, sharedPrefEditor: SharedPreferences.Editor) = viewModelScope.launch {
+    fun register(authModel: AuthModel) = viewModelScope.launch {
         authRepository.registerUser(authModel).collect { resultState: ResultState<Boolean> ->
             when(resultState) {
                 is ResultState.Failure -> _authResult.value = ResultState.Failure(resultState.exception, resultState.message)
                 ResultState.Loading -> _authResult.value = ResultState.Loading
                 is ResultState.Success -> {
-                    updateAuthSharedPref(authModel, sharedPrefEditor)
+                    updateAuthSharedPref(authModel)
                     _authResult.value = ResultState.Success(resultState.data)
                 }
             }
         }
     }
 
-    fun login(authModel: AuthModel, sharedPrefEditor: SharedPreferences.Editor) = viewModelScope.launch {
+    fun login(authModel: AuthModel) = viewModelScope.launch {
         authRepository.loginUser(authModel).collect {resultState: ResultState<Boolean> ->
             when(resultState) {
-                is ResultState.Failure -> _authResult.value = ResultState.Failure(resultState.exception, resultState.message)
-                ResultState.Loading -> _authResult.value = ResultState.Loading
+                is ResultState.Failure -> _loginState.value = ResultState.Failure(resultState.exception, resultState.message)
+                ResultState.Loading -> _loginState.value = ResultState.Loading
                 is ResultState.Success -> {
-                    updateAuthSharedPref(authModel, sharedPrefEditor)
-                    _authResult.value = ResultState.Success(resultState.data)
+                    updateAuthSharedPref(authModel)
+                    _loginState.value = ResultState.Success(resultState.data)
                 }
             }
         }
     }
 
-    private fun updateAuthSharedPref(authModel: AuthModel, sharedPrefEditor: SharedPreferences.Editor) {
+    private fun updateAuthSharedPref(authModel: AuthModel) {
         sharedPrefEditor.putString(ConstantKey.USER_EMAIL, authModel.email)
         sharedPrefEditor.putString(ConstantKey.USER_PASSWORD, authModel.password)
         sharedPrefEditor.putBoolean(ConstantKey.IS_USER_LOGGED_IN, true)
         sharedPrefEditor.commit()
     }
 
+    private fun updateProfileCreationStatus() {
+        sharedPrefEditor.putBoolean(ConstantKey.IS_PROFILE_CREATED, true)
+        sharedPrefEditor.commit()
+    }
 
     fun loginDataChanged(username: String, password: String) {
         if (!isEmailValid(username)) {
@@ -95,7 +103,10 @@ class AuthViewModel @Inject constructor(
             when(resultState) {
                 is ResultState.Failure -> _profileState.value = ResultState.Failure(resultState.exception, resultState.message)
                 ResultState.Loading -> _profileState.value = ResultState.Loading
-                is ResultState.Success -> _profileState.value = ResultState.Success(resultState.data)
+                is ResultState.Success -> {
+                    _profileState.value = ResultState.Success(resultState.data)
+                    updateProfileCreationStatus()
+                }
             }
         }
     }
