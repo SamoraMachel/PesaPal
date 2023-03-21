@@ -32,5 +32,6 @@ class ProfileSetup : AppCompatActivity() {
     private fun navigateToHomeScreen() {
         val intent = Intent(applicationContext, HomeActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

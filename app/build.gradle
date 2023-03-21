@@ -36,11 +36,18 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+//    configurations {
+//        all {
+//            exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk7"
+//            exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
+//        }
+//    }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
@@ -60,6 +67,10 @@ dependencies {
 
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.20-RC'
+
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
 }
 
