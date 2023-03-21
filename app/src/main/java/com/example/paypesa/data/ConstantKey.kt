@@ -7,4 +7,6 @@ object ConstantKey {
     const val USER_PASSWORD = "userPassword"
 
     const val IS_PROFILE_CREATED = "isProfileCreated"
+
+    const val PROFILE_ID = "profileDocumentId"
 }

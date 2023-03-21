@@ -98,12 +98,15 @@ class AuthViewModel @Inject constructor(
         return password.length > 8
     }
 
-    private fun createProfile(profile: ProfileModel) = viewModelScope.launch {
+    fun createProfile(profile: ProfileModel) = viewModelScope.launch {
         profileRepository.createProfile(profile).collect { resultState: ResultState<String> ->
             when(resultState) {
                 is ResultState.Failure -> _profileState.value = ResultState.Failure(resultState.exception, resultState.message)
                 ResultState.Loading -> _profileState.value = ResultState.Loading
                 is ResultState.Success -> {
+                    resultState.data?.let { id: String ->
+                        sharedPrefEditor.putString(ConstantKey.PROFILE_ID, id)
+                    }
                     _profileState.value = ResultState.Success(resultState.data)
                     updateProfileCreationStatus()
                 }

@@ -4,4 +4,4 @@ data class TransactionModel(
     val user: String,
     val date: String,
     val amount: Int,
-): ModelMap()
+)

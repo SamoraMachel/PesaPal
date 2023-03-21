@@ -1,6 +1,7 @@
 package com.example.paypesa.data.datasource
 
 import com.example.paypesa.data.model.ModelMap
+import com.example.paypesa.data.model.toMap
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 class FirebaseDataSource @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
@@ -63,10 +65,10 @@ class FirebaseDataSource @Inject constructor(
         awaitClose()
     }
 
-    suspend fun<T: ModelMap> createDocument(path: String, data: T ) = channelFlow<Result<String>> {
+    suspend fun<T: Any> createDocument(path: String, data: T ) = channelFlow<Result<String>> {
         try {
             firebaseFirestore.collection(path)
-                .add(data.asMap())
+                .add(toMap(data))
                 .addOnSuccessListener {
                     launch {
                         send(Result.success(it.id))
@@ -88,10 +90,10 @@ class FirebaseDataSource @Inject constructor(
         awaitClose()
     }
 
-    suspend fun<T: ModelMap> createNestedDocument(path: String, id: String, data: T) = channelFlow<Result<String>> {
+    suspend fun<T: Any> createNestedDocument(path: String, id: String, data: T) = channelFlow<Result<String>> {
         try {
             firebaseFirestore.collection(path).document(id).collection("transactionLog")
-                .add(data.asMap())
+                .add(toMap(data))
                 .addOnSuccessListener {
                     launch {
                         send(Result.success(it.id))
