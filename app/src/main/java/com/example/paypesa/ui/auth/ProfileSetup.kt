@@ -38,8 +38,9 @@ class ProfileSetup : AppCompatActivity() {
         binding.profileSetup.setOnClickListener {
             val profile  = ProfileModel(
                 sharedPreferences.getString(ConstantKey.USER_EMAIL, "")!!,
+                binding.profileFullName.text.toString(),
                 binding.profilePhoneNumber.text.toString(),
-                0,
+                0.0,
                 null
             )
             authViewModel.createProfile(profile)

@@ -21,3 +21,14 @@ fun <T : Any> toMap(obj: T): Map<String, Any?> {
         }
     }
 }
+
+fun <T: Any> mapToObject(map: Map<String, Any>, clazz: KClass<T>): T {
+    val constructor = clazz.constructors.first()
+
+    val args = constructor
+        .parameters
+        .map { it to map[it.name] }
+        .toMap()
+
+    return constructor.callBy(args)
+}
