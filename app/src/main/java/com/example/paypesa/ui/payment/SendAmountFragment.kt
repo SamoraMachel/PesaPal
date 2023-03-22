@@ -45,8 +45,9 @@ class SendAmountFragment : Fragment() {
         return binding.root
     }
 
-    private fun openPaymentReviewFragment() {
-        navController.navigate(R.id.paymentReviewFragment)
+    private fun openPaymentReviewFragment(amount: Float, profileModel: ProfileModel) {
+        val action = SendAmountFragmentDirections.actionSendAmountFragmentToPaymentReviewFragment(amount, profileModel)
+        navController.navigate(action)
     }
 
     private fun profileRetrieveListener() {
@@ -61,6 +62,12 @@ class SendAmountFragment : Fragment() {
                 }
                 is ResultState.Success -> {
                     showLoader(false)
+                    resultState.data?.let {
+                        openPaymentReviewFragment(
+                            binding.sendAmount.text.toString().toFloat(),
+                            it
+                        )
+                    }
                 }
             }
         }

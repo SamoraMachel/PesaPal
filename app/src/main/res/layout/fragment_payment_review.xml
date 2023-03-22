@@ -66,24 +66,26 @@
                 tools:src="@drawable/download" />
 
             <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/reciever_name"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView7"
                 app:layout_constraintTop_toTopOf="@+id/imageView7"
                 tools:text="John Doe" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/reciever_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@+id/textView11"
-                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                app:layout_constraintStart_toStartOf="@+id/reciever_name"
+                app:layout_constraintTop_toBottomOf="@+id/reciever_name"
                 tools:text="0724484152" />
 
             <TextView
@@ -121,7 +123,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/amount_to_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/andika"
@@ -140,11 +142,11 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="Account"
                 android:textColor="@android:color/darker_gray"
-                app:layout_constraintStart_toStartOf="@+id/textView17"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                app:layout_constraintStart_toStartOf="@+id/amount_to_send"
+                app:layout_constraintTop_toBottomOf="@+id/amount_to_send" />
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/remaining_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
