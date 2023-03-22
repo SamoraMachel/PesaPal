@@ -1,6 +1,7 @@
 package com.example.paypesa.data.datasource
 
 import com.example.paypesa.data.model.ModelMap
+import com.example.paypesa.data.model.ProfileModel
 import com.example.paypesa.data.model.mapToObject
 import com.example.paypesa.data.model.toMap
 import com.google.firebase.auth.FirebaseAuth
@@ -130,8 +131,42 @@ class FirebaseDataSource @Inject constructor(
                     }
                 }
                 .addOnFailureListener {
+                    launch {
+                        send(Result.failure<T>(it))
+                    }
                     it.printStackTrace()
                 }
+        } catch (error: IOException) {
+            error.printStackTrace()
+            send(Result.failure(Exception("Network Error: Kindly check your internet")))
+        } catch (error: Exception) {
+            error.printStackTrace()
+            send(Result.failure(error))
+        }
+        awaitClose()
+    }
+
+    suspend fun readProfileByPhoneNumber(phoneNumber: String) = channelFlow {
+        try {
+            firebaseFirestore.collection("profile")
+                .whereEqualTo("phoneNumber", phoneNumber)
+                .get()
+                .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                    val documentList = querySnapshot.documents
+                    if(documentList.isNotEmpty()) {
+                        val dataProfile = documentList[0]
+                        val obj: ProfileModel? = dataProfile.data?.let { mapToObject(it, ProfileModel::class) }
+                        launch {
+                            send(Result.success(obj))
+                        }
+
+                    } else {
+                        launch {
+                            send(Result.failure<ProfileModel>(Exception("User not found")))
+                        }
+                    }
+                }
+
         } catch (error: IOException) {
             error.printStackTrace()
             send(Result.failure(Exception("Network Error: Kindly check your internet")))
@@ -168,4 +203,5 @@ class FirebaseDataSource @Inject constructor(
             error.printStackTrace()
             send(Result.failure(error))
         }
-    }}
+    }
+}

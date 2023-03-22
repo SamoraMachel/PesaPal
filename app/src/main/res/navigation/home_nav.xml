@@ -28,5 +28,12 @@
         android:id="@+id/paymentReviewFragment"
         android:name="com.example.paypesa.ui.payment.PaymentReviewFragment"
         android:label="fragment_payment_review"
-        tools:layout="@layout/fragment_payment_review" />
+        tools:layout="@layout/fragment_payment_review" >
+        <argument
+            android:name="amount"
+            app:argType="float" />
+        <argument
+            android:name="profile"
+            app:argType="com.example.paypesa.data.model.ProfileModel" />
+    </fragment>
 </navigation>

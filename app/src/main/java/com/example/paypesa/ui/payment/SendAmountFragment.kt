@@ -1,20 +1,27 @@
 package com.example.paypesa.ui.payment
 
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.paypesa.R
+import com.example.paypesa.data.model.ProfileModel
+import com.example.paypesa.data.state.ResultState
 import com.example.paypesa.databinding.FragmentSendAmountBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class SendAmountFragment : Fragment() {
 
     private lateinit var binding: FragmentSendAmountBinding
     private lateinit var navController: NavController
+
+    private val viewModel: SendAmountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +36,10 @@ class SendAmountFragment : Fragment() {
 
         navController = findNavController()
 
+        profileRetrieveListener()
+
         binding.proceed.setOnClickListener {
-            openPaymentReviewFragment()
+            viewModel.retrieveProfile(binding.sendPhoneNumber.text.toString())
         }
 
         return binding.root
@@ -40,5 +49,33 @@ class SendAmountFragment : Fragment() {
         navController.navigate(R.id.paymentReviewFragment)
     }
 
+    private fun profileRetrieveListener() {
+        viewModel.profileRetrieveState.observe(viewLifecycleOwner) { resultState: ResultState<ProfileModel> ->
+            when(resultState) {
+                is ResultState.Failure -> {
+                    showLoader(false)
+                    showSnackbar(message = resultState.message?:"Unknown problem occurred")
+                }
+                ResultState.Loading -> {
+                    showLoader(true, "Retrieving profile")
+                }
+                is ResultState.Success -> {
+                    showLoader(false)
+                }
+            }
+        }
+    }
 
+    private fun showLoader(visible: Boolean = true, message: String = "Loading") {
+        if(visible) {
+            binding.sendMoneyLoader.visibility = View.VISIBLE
+            binding.sendMoneyLoaderText.text = message
+        } else {
+            binding.sendMoneyLoader.visibility = View.GONE
+        }
+    }
+
+    private fun showSnackbar(message: String, length: Int = Snackbar.LENGTH_LONG) {
+        Snackbar.make(binding.root, message, length).show()
+    }
 }

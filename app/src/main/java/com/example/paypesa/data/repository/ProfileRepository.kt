@@ -34,4 +34,15 @@ class ProfileRepository @Inject constructor(
                 emit(ResultState.Failure(result.exceptionOrNull()))
         }
     }
+
+    suspend fun readProfileByPhoneNumber(phoneNumber: String) = flow {
+        emit(ResultState.Loading)
+
+        firebaseDataSource.readProfileByPhoneNumber(phoneNumber).collect { result ->
+            if(result.isSuccess)
+                emit(ResultState.Success(result.getOrNull()))
+            else if(result.isFailure)
+                emit(ResultState.Failure(result.exceptionOrNull()))
+        }
+    }
 }
