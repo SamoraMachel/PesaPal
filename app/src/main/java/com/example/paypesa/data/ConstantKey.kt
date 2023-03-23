@@ -9,4 +9,6 @@ object ConstantKey {
     const val IS_PROFILE_CREATED = "isProfileCreated"
 
     const val PROFILE_ID = "profileDocumentId"
+
+    const val WALLET_AMOUNT = "walletAmount"
 }

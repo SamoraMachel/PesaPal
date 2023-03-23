@@ -1,6 +1,7 @@
 package com.example.paypesa.ui.home
 
 import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val sharedPreferenceEditor: Editor
 ): ViewModel() {
 
     private val _profileState: MutableLiveData<ResultState<ProfileModel>> = MutableLiveData()
@@ -35,6 +37,10 @@ class DashboardViewModel @Inject constructor(
                 ResultState.Loading -> _profileState.value = ResultState.Loading
                 is ResultState.Success -> {
                     _profileState.value = resultState
+                    resultState.data?.let {
+                        sharedPreferenceEditor.putLong(ConstantKey.WALLET_AMOUNT, it.amount)
+                        sharedPreferenceEditor.apply()
+                    }
                 }
             }
         }

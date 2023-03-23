@@ -156,6 +156,7 @@ class FirebaseDataSource @Inject constructor(
                     if(documentList.isNotEmpty()) {
                         val dataProfile = documentList[0]
                         val obj: ProfileModel? = dataProfile.data?.let { mapToObject(it, ProfileModel::class) }
+                        obj?.documentId = dataProfile.id
                         launch {
                             send(Result.success(obj))
                         }

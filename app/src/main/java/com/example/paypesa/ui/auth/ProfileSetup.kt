@@ -40,7 +40,7 @@ class ProfileSetup : AppCompatActivity() {
                 sharedPreferences.getString(ConstantKey.USER_EMAIL, "")!!,
                 binding.profileFullName.text.toString(),
                 binding.profilePhoneNumber.text.toString(),
-                0.0,
+                0,
                 null
             )
             authViewModel.createProfile(profile)

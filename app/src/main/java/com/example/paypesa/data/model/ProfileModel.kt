@@ -8,8 +8,7 @@ data class ProfileModel(
     val email: String,
     val name: String,
     val phoneNumber: String,
-    val amount: Double,
-    val transactionLog: List<TransactionModel>?
+    val amount: Long,
 ) : Parcelable {
-    val documentId: String? = null
+    var documentId: String? = null
 }

@@ -1,5 +1,6 @@
 package com.example.paypesa.ui.home
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,17 +9,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.paypesa.R
+import com.example.paypesa.data.ConstantKey
 import com.example.paypesa.data.model.ProfileModel
 import com.example.paypesa.data.state.ResultState
 import com.example.paypesa.databinding.FragmentDashboardBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
     private lateinit var binding: FragmentDashboardBinding
     private val viewModel: DashboardViewModel by activityViewModels()
+
+    @Inject lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +34,9 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDashboardBinding.inflate(layoutInflater, container, false)
+
+        val walletAmount = sharedPreferences.getLong(ConstantKey.WALLET_AMOUNT, 0)
+        binding.dashboardAccountBalance.text = walletAmount.toString()
 
         profileStateListener()
 
@@ -49,7 +57,6 @@ class DashboardFragment : Fragment() {
                     showLoader(false)
                     resultState.data?.let {
                         binding.welcomeTextView.text = "Welcome Back\n${it.name}"
-                        binding.dashboardAccountBalance.text = it.amount.toString()
                     }
                 }
             }
