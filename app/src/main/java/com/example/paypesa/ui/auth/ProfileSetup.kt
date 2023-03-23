@@ -41,7 +41,6 @@ class ProfileSetup : AppCompatActivity() {
                 binding.profileFullName.text.toString(),
                 binding.profilePhoneNumber.text.toString(),
                 0,
-                null
             )
             authViewModel.createProfile(profile)
         }

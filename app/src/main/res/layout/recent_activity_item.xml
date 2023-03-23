@@ -18,7 +18,7 @@
         tools:src="@tools:sample/avatars[8]" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/transacter_name"
         android:layout_width="0dp"
         android:layout_height="21dp"
         android:layout_marginStart="16dp"
@@ -28,12 +28,12 @@
         android:text="John Doe"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
+        app:layout_constraintEnd_toStartOf="@+id/amount_transacted"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/transaction_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -41,12 +41,12 @@
         android:textAllCaps="false"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintEnd_toStartOf="@+id/amount_transacted"
+        app:layout_constraintStart_toStartOf="@+id/transacter_name"
+        app:layout_constraintTop_toBottomOf="@+id/transacter_name" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/amount_transacted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

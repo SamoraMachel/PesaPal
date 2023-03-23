@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.paypesa.R
 import com.example.paypesa.data.ConstantKey
 import com.example.paypesa.data.model.ProfileModel
+import com.example.paypesa.data.model.TransactionModel
 import com.example.paypesa.data.state.ResultState
 import com.example.paypesa.databinding.FragmentDashboardBinding
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +41,7 @@ class DashboardFragment : Fragment() {
         binding.dashboardAccountBalance.text = walletAmount.toString()
 
         profileStateListener()
+        transactionStateListener()
 
         return binding.root
     }
@@ -57,6 +60,31 @@ class DashboardFragment : Fragment() {
                     showLoader(false)
                     resultState.data?.let {
                         binding.welcomeTextView.text = "Welcome Back\n${it.name}"
+                    }
+                }
+            }
+        }
+    }
+
+    private fun transactionStateListener() {
+        viewModel.transactionState.observe(viewLifecycleOwner) { resultState: ResultState<List<TransactionModel?>> ->
+            when(resultState) {
+                is ResultState.Failure -> {
+                    showLoader(false)
+                    resultState.message?.let {
+                        showSnackbar("it")
+                    }
+                }
+                ResultState.Loading -> {
+                    showLoader(true, "Collecting transactions")
+                }
+                is ResultState.Success -> {
+                    showLoader(false)
+                    resultState.data?.let {
+                        binding.recentRecyclerView.adapter = RecentRecyclerView(it)
+                        binding.recentRecyclerView.layoutManager = LinearLayoutManager(
+                            requireContext(), LinearLayoutManager.VERTICAL, false
+                        )
                     }
                 }
             }
