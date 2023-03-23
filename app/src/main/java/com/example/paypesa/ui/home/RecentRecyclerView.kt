@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.paypesa.R
 import com.example.paypesa.data.model.TransactionModel
 import com.example.paypesa.databinding.RecentActivityItemBinding
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class RecentRecyclerView(private val transactionList: List<TransactionModel?>): RecyclerView.Adapter<RecentRecyclerView.RecentViewHolder>() {
     class RecentViewHolder(itemView: View): ViewHolder(itemView) {
@@ -17,9 +19,10 @@ class RecentRecyclerView(private val transactionList: List<TransactionModel?>): 
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun setup(transaction: TransactionModel) {
+            val transDate = LocalDateTime.ofEpochSecond(transaction.date, 0, ZoneOffset.UTC)
             binding.transacterName.text = transaction.user
             binding.amountTransacted.text = "$${transaction.amount}"
-            var dateValue = "${transaction.date.month} ${transaction.date.dayOfMonth}"
+            var dateValue = "${transDate.month} ${transDate.dayOfMonth}"
             if(transaction.amount > 1) {
                 dateValue += ". Money recieved"
             } else {

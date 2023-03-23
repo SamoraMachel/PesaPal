@@ -1,5 +1,6 @@
 package com.example.paypesa.data.datasource
 
+import android.util.Log
 import com.example.paypesa.data.model.ModelMap
 import com.example.paypesa.data.model.ProfileModel
 import com.example.paypesa.data.model.mapToObject
@@ -184,10 +185,12 @@ class FirebaseDataSource @Inject constructor(
                 .collection("transactionLog").get()
                 .addOnSuccessListener { querySnapshot: QuerySnapshot ->
                     val data = querySnapshot.documents
+                    Log.d("FirebaseDataSource", "readNestedListDocument: Fetching data")
+                    val listOfData = data.map { documentSnapshot: DocumentSnapshot ->
+                        documentSnapshot.data?.let { it1 -> mapToObject(it1, clazz) }
+                    }
+                    Log.d("FirebaseDataSource", "readNestedListDocument: $listOfData")
                     launch {
-                        val listOfData = data.map { documentSnapshot: DocumentSnapshot ->
-                            documentSnapshot.data?.let { it1 -> mapToObject(it1, clazz) }
-                        }
                         send(Result.success(listOfData))
                     }
                 }

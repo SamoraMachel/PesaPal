@@ -34,7 +34,6 @@ class DashboardViewModel @Inject constructor(
 
     init {
         fetchProfile()
-        fetchTransactions()
     }
 
     fun fetchProfile() = viewModelScope.launch {

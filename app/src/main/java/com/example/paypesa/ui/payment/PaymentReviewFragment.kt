@@ -20,6 +20,8 @@ import com.example.paypesa.databinding.FragmentPaymentReviewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -69,7 +71,7 @@ class PaymentReviewFragment : Fragment() {
                     it1,
                     TransactionModel(
                         navArgs.profile.name,
-                        LocalDateTime.now(),
+                        LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
                         -navArgs.amount
                     )
                 )
@@ -113,7 +115,7 @@ class PaymentReviewFragment : Fragment() {
                     viewModel.saveSenderTransactionState(
                         TransactionModel(
                             navArgs.profile.name,
-                            LocalDateTime.now(),
+                            LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
                             navArgs.amount
                         )
                     )

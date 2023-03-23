@@ -7,6 +7,6 @@ import java.time.LocalDateTime
 @Parcelize
 data class TransactionModel(
     val user: String,
-    val date: LocalDateTime,
+    val date: Long,
     val amount: Float,
 ): Parcelable

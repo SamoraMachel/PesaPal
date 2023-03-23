@@ -2,6 +2,7 @@ package com.example.paypesa.ui.home
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +58,7 @@ class DashboardFragment : Fragment() {
                     showLoader(true)
                 }
                 is ResultState.Success -> {
-                    showLoader(false)
+                    viewModel.fetchTransactions()
                     resultState.data?.let {
                         binding.welcomeTextView.text = "Welcome Back\n${it.name}"
                     }
@@ -79,6 +80,7 @@ class DashboardFragment : Fragment() {
                     showLoader(true, "Collecting transactions")
                 }
                 is ResultState.Success -> {
+                    Log.d("Dashboard", "transactionStateListener: ${resultState.data}")
                     showLoader(false)
                     resultState.data?.let {
                         binding.recentRecyclerView.adapter = RecentRecyclerView(it)
@@ -86,6 +88,7 @@ class DashboardFragment : Fragment() {
                             requireContext(), LinearLayoutManager.VERTICAL, false
                         )
                     }
+
                 }
             }
         }
