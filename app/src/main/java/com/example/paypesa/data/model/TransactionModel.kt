@@ -8,5 +8,5 @@ import java.time.LocalDateTime
 data class TransactionModel(
     val user: String,
     val date: Long,
-    val amount: Float,
+    val amount: Double,
 ): Parcelable

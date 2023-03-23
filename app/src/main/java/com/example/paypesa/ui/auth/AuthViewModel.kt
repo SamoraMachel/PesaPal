@@ -15,6 +15,7 @@ import com.example.paypesa.data.repository.ProfileRepository
 import com.example.paypesa.data.state.AuthFormState
 import com.example.paypesa.data.state.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,6 +37,9 @@ class AuthViewModel @Inject constructor(
 
     private val _profileState = MutableLiveData<ResultState<String>>()
     val profileState: LiveData<ResultState<String>> = _profileState
+
+    private val _profileCreatedState = MutableLiveData<ResultState<ProfileModel?>>()
+    val profileCreatedState: LiveData<ResultState<ProfileModel?>> get() = _profileCreatedState
 
     fun register(authModel: AuthModel) = viewModelScope.launch {
         authRepository.registerUser(authModel).collect { resultState: ResultState<Boolean> ->
@@ -63,6 +67,8 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+
+
     private fun updateAuthSharedPref(authModel: AuthModel) {
         sharedPrefEditor.putString(ConstantKey.USER_EMAIL, authModel.email)
         sharedPrefEditor.putString(ConstantKey.USER_PASSWORD, authModel.password)
@@ -70,8 +76,9 @@ class AuthViewModel @Inject constructor(
         sharedPrefEditor.commit()
     }
 
-    private fun updateProfileCreationStatus() {
+    private fun updateProfileCreationStatus(id: String) {
         sharedPrefEditor.putBoolean(ConstantKey.IS_PROFILE_CREATED, true)
+        sharedPrefEditor.putString(ConstantKey.PROFILE_ID, id)
         sharedPrefEditor.commit()
     }
 
@@ -105,10 +112,26 @@ class AuthViewModel @Inject constructor(
                 ResultState.Loading -> _profileState.value = ResultState.Loading
                 is ResultState.Success -> {
                     resultState.data?.let { id: String ->
-                        sharedPrefEditor.putString(ConstantKey.PROFILE_ID, id)
+                        updateProfileCreationStatus(id)
                     }
                     _profileState.value = ResultState.Success(resultState.data)
-                    updateProfileCreationStatus()
+                }
+            }
+        }
+    }
+
+    fun checkProfile(email: String) = viewModelScope.launch {
+        profileRepository.readProfileByEmail(email).collect { resultState: ResultState<ProfileModel?> ->
+            when(resultState) {
+                is ResultState.Failure -> _profileCreatedState.value = resultState
+                ResultState.Loading -> _profileCreatedState.value = ResultState.Loading
+                is ResultState.Success -> {
+                    if(resultState.data != null) {
+                        _profileCreatedState.value = resultState
+                        resultState.data.documentId?.let { updateProfileCreationStatus(it) }
+                    } else {
+                        _profileCreatedState.value = ResultState.Success(null)
+                    }
                 }
             }
         }

@@ -72,7 +72,7 @@ class PaymentReviewFragment : Fragment() {
                     TransactionModel(
                         navArgs.profile.name,
                         LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
-                        -navArgs.amount
+                        -navArgs.amount.toDouble()
                     )
                 )
             }
@@ -116,7 +116,7 @@ class PaymentReviewFragment : Fragment() {
                         TransactionModel(
                             navArgs.profile.name,
                             LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
-                            navArgs.amount
+                            navArgs.amount.toDouble()
                         )
                     )
                 }

@@ -45,4 +45,17 @@ class ProfileRepository @Inject constructor(
                 emit(ResultState.Failure(result.exceptionOrNull()))
         }
     }
+
+    suspend fun readProfileByEmail(email: String) = flow<ResultState<ProfileModel?>> {
+        emit(ResultState.Loading)
+
+        firebaseDataSource.readProfileByEmail(email).collect { result ->
+            if(result.isSuccess)
+                emit(ResultState.Success(result.getOrNull()))
+            else if(result.isFailure)
+                emit(ResultState.Failure(result.exceptionOrNull()))
+        }
+    }
+
+
 }

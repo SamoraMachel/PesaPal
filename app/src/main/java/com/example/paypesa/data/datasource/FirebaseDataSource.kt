@@ -179,6 +179,38 @@ class FirebaseDataSource @Inject constructor(
         awaitClose()
     }
 
+    suspend fun readProfileByEmail(email: String) = channelFlow {
+        try {
+            firebaseFirestore.collection("profile")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                    val documentList = querySnapshot.documents
+                    if(documentList.isNotEmpty()) {
+                        val dataProfile = documentList[0]
+                        val obj: ProfileModel? = dataProfile.data?.let { mapToObject(it, ProfileModel::class) }
+                        obj?.documentId = dataProfile.id
+                        launch {
+                            send(Result.success(obj))
+                        }
+
+                    } else {
+                        launch {
+                            send(Result.failure<ProfileModel>(Exception("User not found")))
+                        }
+                    }
+                }
+
+        } catch (error: IOException) {
+            error.printStackTrace()
+            send(Result.failure(Exception("Network Error: Kindly check your internet")))
+        } catch (error: Exception) {
+            error.printStackTrace()
+            send(Result.failure(error))
+        }
+        awaitClose()
+    }
+
     suspend fun<T: Any> readNestedListDocument(path: String, id: String, clazz: KClass<T>) = channelFlow<Result<List<T?>>> {
         try {
             firebaseFirestore.collection(path).document(id)
@@ -207,5 +239,6 @@ class FirebaseDataSource @Inject constructor(
             error.printStackTrace()
             send(Result.failure(error))
         }
+        awaitClose()
     }
 }

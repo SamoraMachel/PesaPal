@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.paypesa.data.model.AuthModel
+import com.example.paypesa.data.model.ProfileModel
 import com.example.paypesa.data.state.ResultState
 import com.example.paypesa.databinding.ActivityAuthBinding
 import com.example.paypesa.ui.home.HomeActivity
@@ -29,6 +30,7 @@ class AuthActivity : AppCompatActivity() {
 
         loginListener()
         registrationListener()
+        checkProfileStateListener()
 
         binding.authLogin.setOnClickListener {
             val authModel = AuthModel(
@@ -91,7 +93,7 @@ class AuthActivity : AppCompatActivity() {
                 }
                 is ResultState.Success -> {
                     if(resultState.data == true)
-                        navigateToHomeScreen()
+                        authViewModel.checkProfile(binding.authEmail.text.toString())
                     else
                         showSnackbar("Could not login user\nTry logging in again")
                 }
@@ -110,5 +112,24 @@ class AuthActivity : AppCompatActivity() {
 
     private fun showSnackbar(message: String, length: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(binding.root, message, length).show()
+    }
+
+    private fun checkProfileStateListener() {
+        authViewModel.profileCreatedState.observe(this) { resultState: ResultState<ProfileModel?> ->
+            when(resultState) {
+                is ResultState.Failure -> {
+                    showLoadingFrame(false)
+                    resultState.message?.let { showSnackbar(it) }
+                }
+                ResultState.Loading -> showLoadingFrame(true, "Retrieving profile")
+                is ResultState.Success -> {
+                    if(resultState.data != null) {
+                        navigateToHomeScreen()
+                    } else {
+                        navigateToProfileSetup()
+                    }
+                }
+            }
+        }
     }
 }
