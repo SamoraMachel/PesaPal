@@ -95,6 +95,32 @@ class FirebaseDataSource @Inject constructor(
         awaitClose()
     }
 
+    suspend fun updateProfileAmount(id: String, amount: Long) = channelFlow{
+        try {
+            firebaseFirestore.collection("profile")
+                .document(id)
+                .update("amount", amount)
+                .addOnSuccessListener {
+                    launch {
+                        send(Result.success(true))
+                    }
+                }
+                .addOnFailureListener {
+                    launch {
+                        send(Result.failure<Boolean>(it))
+                    }
+                    it.printStackTrace()
+                }
+        } catch (error: IOException) {
+            send(Result.failure(Exception("Network Error: Kindly check your internet")))
+            error.printStackTrace()
+        } catch (error: Exception) {
+            send(Result.failure(error))
+            error.printStackTrace()
+        }
+        awaitClose()
+    }
+
     suspend fun<T: Any> createNestedDocument(path: String, id: String, data: T) = channelFlow<Result<String>> {
         try {
             firebaseFirestore.collection(path).document(id).collection("transactionLog")

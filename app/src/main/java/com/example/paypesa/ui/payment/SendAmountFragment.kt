@@ -73,6 +73,8 @@ class SendAmountFragment : Fragment() {
         }
     }
 
+
+
     private fun showLoader(visible: Boolean = true, message: String = "Loading") {
         if(visible) {
             binding.sendMoneyLoader.visibility = View.VISIBLE

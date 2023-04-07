@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.paypesa.R
 import com.example.paypesa.databinding.ActivityHomeBinding
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,13 +30,13 @@ class HomeActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.fragmentContainerView)
 
-        val bottomAppBar: BottomAppBar = binding.bottomAppBar
-        setSupportActionBar(bottomAppBar)
+        val bottomAppBar: BottomNavigationView = binding.bottomAppBar
+        bottomAppBar.setupWithNavController(navController)
 
-        binding.sendMoneyFab.setOnClickListener {
-            binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#F5F3EF"))
-            openSendMoneyFragment()
-        }
+//        binding.sendMoneyFab.setOnClickListener {
+//            binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#F5F3EF"))
+//            openSendMoneyFragment()
+//        }
      }
 
     private fun openSendMoneyFragment() {
@@ -50,12 +51,10 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.dashboardFragment -> {
-                binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#F5F3EF"))
                 navController.navigate(R.id.dashboardFragment)
                 true
             }
             R.id.transactionFragment -> {
-                binding.coordinatorLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
                 navController.navigate(R.id.transactionFragment)
                 true
             }

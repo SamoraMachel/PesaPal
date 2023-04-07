@@ -10,4 +10,8 @@
 
     <color name="blue_700">#1E88E5</color>
     <color name="blue_900">#072980</color>
+
+    <color name="purple_900">#2D0780</color>
+
+    <color name="off_white">#F5F3EF</color>
 </resources>

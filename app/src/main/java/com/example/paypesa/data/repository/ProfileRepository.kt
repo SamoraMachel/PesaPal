@@ -57,5 +57,15 @@ class ProfileRepository @Inject constructor(
         }
     }
 
+    suspend fun updatedProfileAmount(id: String, amount: Long) = flow {
+        emit(ResultState.Loading)
+
+        firebaseDataSource.updateProfileAmount(id, amount).collect { result ->
+            if(result.isSuccess)
+                emit(ResultState.Success(result.getOrNull()))
+            else if(result.isFailure)
+                emit(ResultState.Failure(result.exceptionOrNull()))
+        }
+    }
 
 }

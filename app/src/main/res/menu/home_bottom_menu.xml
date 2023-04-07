@@ -6,12 +6,19 @@
         android:id="@+id/dashboardFragment"
         android:icon="@drawable/round_home_24"
         android:title="Home"
-        app:iconTint="@color/white"
-        app:showAsAction="always" />
+        app:iconTint="@color/blue_900"
+        app:showAsAction="always|withText" />
     <item
         android:id="@+id/transactionFragment"
         android:icon="@drawable/baseline_attach_money_24"
         android:title="Payments"
-        app:showAsAction="always"
-        app:iconTint="@color/white"/>
+        app:iconTint="@color/blue_900"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/wallet"
+        android:icon="@drawable/ic_baseline_web_stories_24"
+        android:title="Wallet"
+        app:iconTint="@color/blue_900"
+        app:showAsAction="always|withText" />
 </menu>

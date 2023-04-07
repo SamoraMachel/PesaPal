@@ -59,9 +59,6 @@ class DashboardFragment : Fragment() {
                 }
                 is ResultState.Success -> {
                     viewModel.fetchTransactions()
-                    resultState.data?.let {
-                        binding.welcomeTextView.text = "Welcome Back\n${it.name}"
-                    }
                 }
             }
         }
@@ -83,6 +80,9 @@ class DashboardFragment : Fragment() {
                     Log.d("Dashboard", "transactionStateListener: ${resultState.data}")
                     showLoader(false)
                     resultState.data?.let {
+                        if (it.isNotEmpty()) {
+                            binding.noItemsConstraint.visibility = View.GONE
+                        }
                         binding.recentRecyclerView.adapter = RecentRecyclerView(it)
                         binding.recentRecyclerView.layoutManager = LinearLayoutManager(
                             requireContext(), LinearLayoutManager.VERTICAL, false

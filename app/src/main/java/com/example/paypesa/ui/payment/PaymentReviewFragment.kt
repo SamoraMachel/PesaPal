@@ -21,7 +21,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,6 +52,9 @@ class PaymentReviewFragment : Fragment() {
 
         transactionStateListener()
         senderTransactionStateListener()
+
+        senderProfileUpdatedListener()
+        recieverProfileUpdateListener()
 
         val recieverProfile = navArgs.profile
 
@@ -135,8 +137,51 @@ class PaymentReviewFragment : Fragment() {
                     showLoader(true, "Synching transaction log")
                 }
                 is ResultState.Success -> {
+                    viewModel.updateRecieverProfile(
+                        navArgs.amount.toLong(),
+                        navArgs.profile
+                    )
+                }
+            }
+        }
+    }
+
+    private fun senderProfileUpdatedListener() {
+        viewModel.senderProfileUpdate.observe(viewLifecycleOwner) { resultState ->
+            when(resultState) {
+                is ResultState.Failure -> {
                     showLoader(false)
-                    openDashboardFragment()
+                    resultState.message?.let { showSnackbar(it) }
+                }
+                ResultState.Loading -> showLoader(true, "Synching updates...")
+                is ResultState.Success -> {
+                    resultState.data?.let {
+                        if(it) {
+                            openDashboardFragment()
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun recieverProfileUpdateListener() {
+        viewModel.recieverProfileUpdate.observe(viewLifecycleOwner) { resultState ->
+            when(resultState) {
+                is ResultState.Failure -> {
+                    showLoader(false)
+                    resultState.message?.let { showSnackbar(it) }
+                }
+                ResultState.Loading -> showLoader(true, "Updating data...")
+                is ResultState.Success -> {
+                    resultState.data?.let {
+                        if(it) {
+                            val walletAmount: Long = sharedPreferences.getLong(ConstantKey.WALLET_AMOUNT, 0)
+                            val amountRemaining = walletAmount - navArgs.amount
+                            viewModel.updateSenderProfile(amountRemaining)
+                        }
+                    }
                 }
             }
         }

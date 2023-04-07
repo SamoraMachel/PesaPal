@@ -6,46 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F5F3EF"
+        app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/send_money_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="24dp"
-            android:clickable="true"
-            app:backgroundTint="@color/blue_700"
-            app:layout_anchor="@id/bottomAppBar"
-            app:srcCompat="@drawable/baseline_add_24"
-            app:tint="@color/white" />
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:backgroundTint="@color/blue_900"
-            app:fabAlignmentMode="end"
-            app:fabAnchorMode="cradle"
-            app:fabCradleMargin="10dp"
-            app:fabCradleRoundedCornerRadius="5dp"
-            app:layout_anchor="@+id/bottomAppBar"
-            app:layout_anchorGravity="bottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/home_bottom_menu" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/home_bottom_menu" />
 
     <fragment
         android:id="@+id/fragmentContainerView"
@@ -54,10 +23,12 @@
         android:layout_height="0dp"
         android:background="#00FFFFFF"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:navGraph="@navigation/home_nav"
-        tools:layout_editor_absoluteX="-78dp" />
+        app:navGraph="@navigation/home_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
